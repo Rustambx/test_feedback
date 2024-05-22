@@ -1,0 +1,139 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Feedback API",
+        "description": "API documentation for Laravel application",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/feedback": {
+            "post": {
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Store feedback",
+                "description": "Endpoint to store feedback data",
+                "operationId": "d30e39401fd8d4b0b1bfa530d598187f",
+                "requestBody": {
+                    "description": "Feedback data",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Имя клиента",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "Email клиента",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "phone": {
+                                        "description": "Телефон клиента",
+                                        "type": "string"
+                                    },
+                                    "city": {
+                                        "description": "Город клиента",
+                                        "type": "string"
+                                    },
+                                    "subject": {
+                                        "description": "Тема обращения",
+                                        "type": "string"
+                                    },
+                                    "message": {
+                                        "description": "Сообщение",
+                                        "type": "string"
+                                    },
+                                    "file": {
+                                        "description": "Вложенный файл",
+                                        "type": "file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Feedback submitted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Feedback submitted successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "test"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "test@mailru"
+                                                },
+                                                "phone": {
+                                                    "type": "string",
+                                                    "example": "+9987844545"
+                                                },
+                                                "city": {
+                                                    "type": "string",
+                                                    "example": "Moscow"
+                                                },
+                                                "subject": {
+                                                    "type": "string",
+                                                    "example": "Test subject"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "test message"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-05-22T13:56:26.000000Z"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-05-22T13:56:26.000000Z"
+                                                },
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": [
+                            "Bearer YOUR_STATIC_TOKEN"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "ApiKeyAuth": {
+                "type": "apiKey",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    }
+}

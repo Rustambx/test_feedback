@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+    feedback-php:
+        container_name: feedback-php
+        build:
+            context: .
+            dockerfile: ./docker/php/Dockerfile
+        volumes:
+            - ./:/var/www
+        ports:
+            - "9000:9000"
+
+    feedback-mysql:
+        container_name: feedback-mysql
+        build: docker/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: feedback_db
+        volumes:
+            - ./docker/mysql/data:/var/lib/mysql
+
+    feedback-nginx:
+        container_name: feedback-nginx
+        build:
+            context: .
+            dockerfile: ./docker/nginx/Dockerfile
+        ports:
+            - "80:80"
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - feedback-php
