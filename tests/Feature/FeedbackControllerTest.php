@@ -22,7 +22,7 @@ class FeedbackControllerTest extends TestCase
             'city' => 'New York',
             'subject' => 'Test Subject',
             'message' => 'Test message',
-            'file' => UploadedFile::fake()->image('test.jpg')
+            'file' => UploadedFile::fake()->create('test.jpg', 100)
         ];
 
         $response = $this->withHeaders([
@@ -33,12 +33,16 @@ class FeedbackControllerTest extends TestCase
             ->assertJson([
                 'message' => 'Feedback submitted successfully',
                 'data' => [
-                    'name' => $data['name'],
-                    'email' => $data['email'],
-                    'phone' => $data['phone'],
-                    'city' => $data['city'],
-                    'subject' => $data['subject'],
-                    'message' => $data['message'],
+                    'headers' => [],
+                    'original' => [
+                        'name' => $data['name'],
+                        'email' => $data['email'],
+                        'phone' => $data['phone'],
+                        'city' => $data['city'],
+                        'subject' => $data['subject'],
+                        'message' => $data['message'],
+                    ],
+                    'exception' => null,
                 ]
             ]);
     }

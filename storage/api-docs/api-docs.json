@@ -20,6 +20,14 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "phone",
+                                    "city",
+                                    "subject",
+                                    "message"
+                                ],
                                 "properties": {
                                     "name": {
                                         "description": "Имя клиента",
@@ -109,6 +117,22 @@
                                                 }
                                             },
                                             "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation error"
                                         }
                                     },
                                     "type": "object"

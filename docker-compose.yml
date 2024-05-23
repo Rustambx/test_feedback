@@ -1,36 +1,46 @@
 version: '3.8'
 
 services:
-    feedback-php:
-        container_name: feedback-php
-        build:
-            context: .
-            dockerfile: ./docker/php/Dockerfile
-        volumes:
-            - ./:/var/www
-        ports:
-            - "9000:9000"
-        command: ["bash", "-c", "composer install && php-fpm"]
-
     feedback-mysql:
-        container_name: feedback-mysql
         build: docker/mysql
+        container_name: feedback-mysql
+        restart: unless-stopped
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: feedback_db
         volumes:
             - ./docker/mysql/data:/var/lib/mysql
         ports:
-            - 3306:3306
+            - "3306:3306"
 
-    feedback-nginx:
-        container_name: feedback-nginx
+    feedback-php:
         build:
             context: .
+            dockerfile: ./docker/php/Dockerfile
+        container_name: feedback-php
+        restart: unless-stopped
+        volumes:
+            - .:/var/www
+        working_dir: /var/www
+        depends_on:
+            - feedback-mysql
+        environment:
+            DB_CONNECTION: mysql
+            DB_HOST: feedback-mysql
+            DB_PORT: 3306
+            DB_DATABASE: feedback_db
+            DB_USERNAME: root
+            DB_PASSWORD: root
+        command: sh -c "cp .env.example .env && composer install && php artisan key:generate && php artisan migrate && php artisan l5-swagger:generate && php-fpm"
+
+    feedback-nginx:
+        build:
             dockerfile: ./docker/nginx/Dockerfile
+        container_name: feedback-nginx
+        restart: unless-stopped
         ports:
             - "80:80"
         volumes:
-            - ./:/var/www
+            - .:/var/www
         depends_on:
             - feedback-php

@@ -1,35 +1,27 @@
 FROM php:8.2-fpm
 
-# Установка зависимостей
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
+    git \
+    curl \
     libpng-dev \
-    libonig-dev \
-    libzip-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
     zip \
     unzip \
-    git
+    libonig-dev \
+    libxml2-dev \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Установка расширений PHP
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
-
-# Установка Composer
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Копирование исходного кода
+# Set working directory
 WORKDIR /var/www
 
-# Копирование текущего приложения
-COPY . .
+# Copy existing application directory contents
+COPY . /var/www
 
-# Установка зависимостей
-RUN composer install
-
-# Настройка прав доступа
-RUN chown -R www-data:www-data /var/www
-
+# Expose port 9000 and start php-fpm server
 EXPOSE 9000
-
 CMD ["php-fpm"]

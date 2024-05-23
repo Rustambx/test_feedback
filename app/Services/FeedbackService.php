@@ -12,7 +12,11 @@ class FeedbackService
         $data = $request->validated();
         $filePath = null;
         if ($request->hasFile('file')) {
-            $filePath = $request->file('file')->store('feedback_files', 'public');
+            if ($request->file('file')->isValid()) {
+                $filePath = $request->file('file')->store('feedback_files', 'public');
+            } else {
+                return response()->json(['error' => 'Ошибка при загрузке файла'], 400);
+            }
         }
 
         $feedback = Feedback::create([
@@ -25,6 +29,6 @@ class FeedbackService
             'file' => $filePath,
         ]);
 
-        return $feedback;
+        return response()->json($feedback, 201);
     }
 }
