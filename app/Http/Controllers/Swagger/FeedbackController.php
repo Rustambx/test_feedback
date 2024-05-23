@@ -28,6 +28,7 @@ use Illuminate\Http\Request;
  *         @OA\MediaType(
  *             mediaType="multipart/form-data",
  *             @OA\Schema(
+ *                 required={"name", "email", "phone", "city", "subject", "message"},
  *                 @OA\Property(
  *                     property="name",
  *                     type="string",
@@ -84,6 +85,13 @@ use Illuminate\Http\Request;
  *             @OA\Property(property="id", type="integer", example=1),
  *         ),
  *      ),
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Bad request",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Validation error")
+ *         )
  *     ),
  *     security={{"ApiKeyAuth": {"Bearer YOUR_STATIC_TOKEN"}}}
  * )

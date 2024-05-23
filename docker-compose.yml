@@ -10,6 +10,7 @@ services:
             - ./:/var/www
         ports:
             - "9000:9000"
+        command: ["bash", "-c", "composer install && php-fpm"]
 
     feedback-mysql:
         container_name: feedback-mysql
@@ -19,6 +20,8 @@ services:
             MYSQL_DATABASE: feedback_db
         volumes:
             - ./docker/mysql/data:/var/lib/mysql
+        ports:
+            - 3306:3306
 
     feedback-nginx:
         container_name: feedback-nginx

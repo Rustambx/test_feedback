@@ -15,6 +15,8 @@ class TokenCheckMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $request->headers->set('Accept', 'application/json');
+
         $generatedToken = 'gaCSc0IKz3b0KLGvMzxjqD7izjRWBfsFkOLmxgBrS7MssD2j7RUqdUTAA25HcrY9';
 
         $token = $request->header('Authorization');
